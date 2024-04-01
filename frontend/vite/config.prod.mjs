@@ -24,6 +24,11 @@ export default defineConfig({
                 comments: false
             }
         }
-    }
+    },
+    resolve: {
+        alias: {
+          $lib: path.resolve("./src/lib"),
+        },
+      },
 });
 

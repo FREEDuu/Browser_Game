@@ -1,8 +1,9 @@
-<svelte:head>
+<script>import "../app.pcss";
+import "../app.pcss";</script><svelte:head>
     <title>Phaser Svelte Template</title>
 </svelte:head>
 
-<slot />
+<slot></slot>
 
 <style>
     :global(body) {
