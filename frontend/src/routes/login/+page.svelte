@@ -2,19 +2,23 @@
     import { supabase } from '$lib/supabase';
     import { Input } from "$lib/components/ui/input";
     import { Button } from "$lib/components/ui/button/index.js";
+    import Reload from "svelte-radix/Reload.svelte";
 
     export let email: string;
     export let password: string;
     export let supabaseError: string;
+    export let isLoading: boolean = false;
 
-    async function Login(event: any) {
+    async function login(event: any) {
       event.preventDefault();
-  
+
+      isLoading = true;
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
-  
+      isLoading = false;
+
       if (error) {
         supabaseError = error.message;
       } else {
@@ -27,28 +31,48 @@
   
   <div id="bg" class="flex h-screen justify-center items-center">
 
-    <form on:submit={Login} class="w-full max-w-md space-y-4">
+    <form on:submit={login} class="w-full max-w-md space-y-4">
 
-    <div class="flex flex-col gap-2 p-10 z-50 rounded drop-shadow-xl bg-gradient-to-b from-white to-red-200">
+      <div class="flex flex-col gap-2 px-10 pt-10 pb-2 z-50 rounded drop-shadow-xl text-xl bg-gradient-to-b from-white to-red-300">
 
-        <div class="flex flex-col">
-            <label for="email">Email</label>
-            <Input type="email" bind:value={email} id="email" required />
-        </div>
-      
+        <h1 class="text-2xl font-bold">Login into your account</h1>
+
           <div class="flex flex-col">
-            <label for="password">Password</label>
-            <Input type="password" bind:value={password} id="password" required />
+              <label for="email">Email</label>
+              <Input type="email" bind:value={email} id="email" required />
           </div>
-      
-          <Button type="submit" class="self center  py-2 mt-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-md">
-            Login
-          </Button>
-    </div>
+        
+            <div class="flex flex-col">
+              <label for="password">Password</label>
+              <Input type="password" bind:value={password} id="password" required />
+            </div>
+        
+            <Button type="submit" class="flex self center text-xl py-2 mt-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-md" disabled="{isLoading}">
+              {#if isLoading }
+              <Reload class="mr-2 h-4 w-4 animate-spin" />
+              {:else}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+              {/if}
 
-      {#if supabaseError}
-        <p style="color: red">{supabaseError}</p>
-      {/if}
+              
+              Login
+            </Button>
+
+            {#if supabaseError}
+              <div class="flex gap-2 items-center mt-2 drop-shadow-md bg-red-200 p-1 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                </svg>
+                <p class="text-red-600">- {supabaseError}</p>
+              </div>
+            {/if}
+
+            <div class="self-end text-md">don't have an account? <a href="/signup" class="text-red-600 hover:text-red-500 hover:underline">Sign up here</a></div>
+
+      </div>
+
     </form>
 
   </div>
@@ -56,7 +80,7 @@
   <style>
     #bg {
         background-image: url('/assets/opaquebg.jpeg'); 
-        background-size: cover; /* Adjust: contain, auto, etc. */
+        background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         opacity: 0.8; 

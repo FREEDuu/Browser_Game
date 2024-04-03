@@ -14,6 +14,9 @@ import "../app.pcss";
         padding: 0;
         color: rgba(0, 0, 0, 0.87);
         /*background-color: #ffeab8;*/
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: monogram, Arial, Helvetica, sans-serif;
     }
+
+
+
 </style>
