@@ -1,5 +1,8 @@
-<script>import "../app.pcss";
-import "../app.pcss";</script><svelte:head>
+<script>
+import "../app.pcss";
+</script>
+
+<svelte:head>
     <title>Phaser Svelte Template</title>
 </svelte:head>
 
@@ -10,8 +13,7 @@ import "../app.pcss";</script><svelte:head>
         margin: 0;
         padding: 0;
         color: rgba(0, 0, 0, 0.87);
-        background-color: #ffeab8;
-        /*background-color: #000000;*/
+        /*background-color: #ffeab8;*/
         font-family: Arial, Helvetica, sans-serif;
     }
 </style>
