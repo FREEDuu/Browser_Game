@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import path from 'path';
 
 process.stdout.write(`Building for production...\n`);
 const line = "---------------------------------------------------------";

@@ -4,10 +4,10 @@
     import { Button } from "$lib/components/ui/button/index.js";
     import Reload from "svelte-radix/Reload.svelte";
 
-    export let email: string;
-    export let password: string;
-    export let supabaseError: string;
-    export let isLoading: boolean = false;
+    let email: string;
+    let password: string;
+    let supabaseError: string;
+    let isLoading: boolean = false;
 
     async function login(event: any) {
       event.preventDefault();

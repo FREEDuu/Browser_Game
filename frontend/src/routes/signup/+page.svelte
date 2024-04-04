@@ -4,12 +4,12 @@
     import { Button } from "$lib/components/ui/button/index.js";
     import Reload from "svelte-radix/Reload.svelte";
 
-    export let email: string;
-    export let username: string;
-    export let password: string;
-    export let supabaseError: string;
-    export let successMessage: string;
-    export let isLoading: boolean = false;
+    let email: string;
+    let username: string;
+    let password: string;
+    let supabaseError: string;
+    let successMessage: string;
+    let isLoading: boolean = false;
 
     let userData;
 
@@ -117,12 +117,12 @@
               Sign Up
             </Button>
 
-            {#if !supabaseError}
+            {#if supabaseError}
               <div class="flex gap-2 items-center mt-2 drop-shadow-md bg-red-200 p-1 rounded">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                 </svg>
-                <p class="text-red-600">- {supabaseError} asdsadasdas</p>
+                <p class="text-red-600">- {supabaseError}</p>
               </div>
             {/if}
 
