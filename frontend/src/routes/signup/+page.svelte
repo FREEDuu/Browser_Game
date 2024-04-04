@@ -1,84 +1,49 @@
 <script lang="ts">
-    import { supabase } from '$lib/supabase';
-    import { Input } from "$lib/components/ui/input";
-    import { Button } from "$lib/components/ui/button/index.js";
-    import Reload from "svelte-radix/Reload.svelte";
+  import { Input } from "$lib/components/ui/input";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import Reload from "svelte-radix/Reload.svelte";
 
-    let email: string;
-    let username: string;
-    let password: string;
-    let supabaseError: string;
-    let successMessage: string;
-    let isLoading: boolean = false;
+  let email = '';
+  let username = '';
+  let password = '';
+  let isLoading = false;
+  let supabaseError: string;
+  let successMessage: string;
 
-    let userData;
+  async function signup(event: any) {
+    event.preventDefault();
 
-    async function signup(event: any) {
-      event.preventDefault();
+    isLoading = true;
 
-        isLoading = true;
-        if (username.length < 3 || username.length > 20) {
-            supabaseError = 'Username must be 3-20 characters long.';
-            isLoading = false;
-            return;
-        }
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('username', username);
+    formData.append('password', password);
 
-        const isAvailable = await isUsernameAvailable(username);
-        if (!isAvailable) {
-            supabaseError = 'Username already taken. Please choose another.';
-            isLoading = false;
-            return;
-        }
+    const response = await fetch('/signup?/signup ', {
+      method: 'POST',
+      body: formData,
+    });
 
-      const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-            emailRedirectTo: "http://localhost:5173/",
-            data: { username: username }
-        }
-      })
-      userData = data;
-      isLoading = false;
-      console.log("userData",userData)
+    const data = await response.json();
+    console.log("data",data)
 
-      if (error) {
-        supabaseError = error.message;
-      } else {
-        // Successful signup, add referencing data to utenti table
-        if(userData.user != null) {
-            const { data: profileError } = await supabase.from('utenti').insert({
-                uuid: userData.user.id,
-                username: username
-            });
-
-            if (profileError) {
-                supabaseError = 'Error saving username. Please try again.';
-            } else {
-                // Username saved successfully
-                successMessage = 'Check your inbox for verification link'
-            }
-        }
-
-      }
+    if (data.status == 200) {
+      email = '';
+      username = '';
+      password = '';
+      supabaseError = '';
+      successMessage = data.message;
+      data.userData = data.user;
+    } else {
+      // Handle error
+      supabaseError = data.message;
+      successMessage = '';
     }
 
-    async function isUsernameAvailable(username: string) {
-        const { data, error, count } = await supabase
-            .from('utenti') 
-            .select('username', { count: 'exact' })
-            .eq('username', username)
-            .limit(1);
-
-        if (error) {
-            console.log(error);
-            return false;
-        }
-
-        return count === 0;
-    }
-
-  </script>
+    isLoading = false;
+  }
+</script>
   
   
   <div id="bg" class="flex h-screen justify-center items-center">
