@@ -1,7 +1,18 @@
 <script>
 import "../app.pcss";
+import { page } from '$app/stores';
+import { supabase } from '$lib/supabase';
 
-export let data;
+$: user = $page.data.user;
+
+// event listener in +layout.svelte will update the user store whenever the authentication state changes
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session?.user) {
+    user = session.user;
+  } else {
+    user = null;
+  }
+});
 
 </script>
 
@@ -18,8 +29,7 @@ export let data;
         color: rgba(0, 0, 0, 0.87);
         /*background-color: #ffeab8;*/
         font-family: monogram, Arial, Helvetica, sans-serif;
+        font-size: 1.5rem;
     }
-
-
 
 </style>

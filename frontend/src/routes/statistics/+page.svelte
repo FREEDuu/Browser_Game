@@ -5,7 +5,7 @@
     import { page } from '$app/stores';
 
     // user data imported from load function of parent layout.server.ts load function
-    // console.log("$page.data",$page.data)
+    console.log("$page.data",$page.data)
 
   </script>
    
