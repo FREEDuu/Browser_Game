@@ -1,37 +1,45 @@
 <script lang="ts">
-    import { supabase } from '$lib/supabase';
     import { Input } from "$lib/components/ui/input";
     import { Button } from "$lib/components/ui/button/index.js";
     import Reload from "svelte-radix/Reload.svelte";
+    import { enhance, applyAction } from '$app/forms';
+    import { goto } from '$app/navigation';
+    import { page } from '$app/stores';
 
-    let email: string;
-    let password: string;
+    let email = '';
+    let password = '';
     let supabaseError: string;
     let isLoading: boolean = false;
-
-    async function login(event: any) {
-      event.preventDefault();
-
-      isLoading = true;
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-      isLoading = false;
-
-      if (error) {
-        supabaseError = error.message;
-      } else {
-        // Successful login, redirect to home
-        window.location.href = '/';
-      }
-    }
+    
   </script>
   
   
   <div id="bg" class="flex h-screen justify-center items-center">
 
-    <form on:submit={login} class="w-full max-w-md space-y-4">
+    <form 
+      class="w-full max-w-md space-y-4"
+      method="POST"
+      action="/login?/login"
+      use:enhance={({ formElement, formData, action, cancel, submitter }) => {
+        /* https://kit.svelte.dev/docs/form-actions#loading-data */
+
+        isLoading = true;
+  
+        formData.append('email', email);
+        formData.append('password', password);
+
+        return async ({ result, update }) => {
+          if (result.type === 'success') {
+            goto('/');
+          } else if (result.type === 'failure') {
+            supabaseError = '' + (result.data?.message ?? 'An unexpected error occurred.');
+          }
+
+          await applyAction(result) // Aggiorna lo store $page.form con i valori di ritorno della action
+          isLoading = false;
+        };
+
+      }}>
 
       <div class="flex flex-col gap-2 px-10 pt-10 pb-2 z-50 rounded drop-shadow-xl text-xl bg-gradient-to-b from-white to-red-300">
 
@@ -39,12 +47,12 @@
 
           <div class="flex flex-col">
               <label for="email">Email</label>
-              <Input type="email" bind:value={email} id="email" required />
+              <Input type="text" id="email" bind:value={email} required />
           </div>
         
             <div class="flex flex-col">
               <label for="password">Password</label>
-              <Input type="password" bind:value={password} id="password" required />
+              <Input type="password" id="password" bind:value={password} required />
             </div>
         
             <Button type="submit" class="flex self center text-xl py-2 mt-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-md" disabled="{isLoading}">
