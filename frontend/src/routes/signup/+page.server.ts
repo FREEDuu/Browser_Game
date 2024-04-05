@@ -40,7 +40,7 @@ import { fail, json } from '@sveltejs/kit';
         email: email,
         password: password,
         options: {
-          emailRedirectTo: "http://localhost:5173/",
+          emailRedirectTo: "http://localhost:5173/", //TODO
           data: { username: username },
         },
       });
@@ -58,14 +58,7 @@ import { fail, json } from '@sveltejs/kit';
           return fail(500, { message: profileError.message });
         }
       
-        return json({
-          status: 200,
-          body: {
-            message: 'Check your inbox for confirmation',
-            user: signupData.user,
-          },
-        }) ;
-        
+        return { success: true };
       }
   
     }

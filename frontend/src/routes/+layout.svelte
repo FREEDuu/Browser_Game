@@ -1,5 +1,8 @@
 <script>
 import "../app.pcss";
+
+export let data;
+
 </script>
 
 <svelte:head>
