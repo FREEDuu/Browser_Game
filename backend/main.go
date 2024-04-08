@@ -1,59 +1,35 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
-	supabase "github.com/supabase-community/supabase-go"
+	"github.com/joho/godotenv"
+	supabase "github.com/nedpals/supabase-go"
+
+	routes "browser_game/routes"
 )
 
-var db = make(map[string]string)
-
-func setupRouter() *gin.Engine {
-
-	db["user_1"] = "Cracco"
-	db["user_2"] = "Cannavacciuolo"
-	db["user_3"] = "Bastianich"
-
-	r := gin.Default()
-
-	// Ping test
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	r.GET("/user/:name", func(c *gin.Context) {
-		user := c.Params.ByName("name")
-		value, ok := db[user]
-		if ok {
-			c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-		} else {
-			c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-		}
-	})
-
-	return r
-}
-
 func main() {
-	r := setupRouter()
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("Error loading .env file")
+		return
+	}
 
 	supabaseURL := os.Getenv("SUPABASE_URL")
 	anonKey := os.Getenv("SUPABASE_ANON_KEY")
+	client := supabase.CreateClient(supabaseURL, anonKey)
 
-	options := &supabase.ClientOptions{}
-	client, err := supabase.NewClient(supabaseURL, anonKey, options)
+	ctx := context.Background()
+	_, err := client.Auth.SignIn(ctx, supabase.UserCredentials{
+		Email:    os.Getenv("BACKEND_EMAIL"),
+		Password: os.Getenv("BACKEND_PASS"),
+	})
 	if err != nil {
-		fmt.Println("cannot initialize client", err)
-		return
+		panic(err)
 	}
-	print(client)
 
+	r := routes.SetupRouter(client)
 	r.Run(":3000")
-}
-
-func LoginHandler(c *gin.Context) {
-
 }
