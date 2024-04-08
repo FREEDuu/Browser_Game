@@ -5,8 +5,6 @@
     import PhaserGame, { type TPhaserRef } from "../../game/PhaserGame.svelte";
     import { page } from '$app/stores';
 
-    console.log("User data",$page.data.user)
-
     // The sprite can only be moved in the MainMenu Scene
     let canMoveSprite = false;
 

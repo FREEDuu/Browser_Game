@@ -1,7 +1,22 @@
-<script>
+<script lang="ts">
     import { goto } from "$app/navigation";
     import { Button } from "$lib/components/ui/button/index";
     import Navbar from "@/components/Navbar.svelte";
+    import CirclePlus from "lucide-svelte/icons/circle-plus";
+    import Cloud from "lucide-svelte/icons/cloud";
+    import CreditCard from "lucide-svelte/icons/credit-card";
+    import Github from "lucide-svelte/icons/github";
+    import Keyboard from "lucide-svelte/icons/keyboard";
+    import LifeBuoy from "lucide-svelte/icons/life-buoy";
+    import LogOut from "lucide-svelte/icons/log-out";
+    import Mail from "lucide-svelte/icons/mail";
+    import MessageSquare from "lucide-svelte/icons/message-square";
+    import Plus from "lucide-svelte/icons/plus";
+    import Settings from "lucide-svelte/icons/settings";
+    import User from "lucide-svelte/icons/user";
+    import UserPlus from "lucide-svelte/icons/user-plus";
+    import Users from "lucide-svelte/icons/users";
+    import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 
 </script>
 

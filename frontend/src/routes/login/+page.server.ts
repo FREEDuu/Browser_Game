@@ -26,8 +26,6 @@ import { fail, json } from '@sveltejs/kit';
         password: password,
       });
     
-      console.log("loginError",loginError)
-
       if (loginError) 
         return fail(400, { message: loginError.message });
       else

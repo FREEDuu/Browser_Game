@@ -4,6 +4,7 @@ import { page } from '$app/stores';
 import { supabase } from '$lib/supabase';
 
 $: user = $page.data.user;
+$: console.log("USER: ",user)
 
 // event listener in +layout.svelte will update the user store whenever the authentication state changes
 supabase.auth.onAuthStateChange((event, session) => {
@@ -13,7 +14,6 @@ supabase.auth.onAuthStateChange((event, session) => {
     user = null;
   }
 });
-
 </script>
 
 <svelte:head>
