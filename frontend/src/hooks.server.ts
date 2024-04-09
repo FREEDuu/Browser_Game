@@ -23,7 +23,7 @@ export async function handle({ event, resolve }) {
     
     // Check if the requested URL is a protected route
     if (protectedRoutes.some(route => event.url.pathname.startsWith(route))) {
-        console.log("protected route requested")
+        console.log("protected route requested: ",event.url.pathname)
 
         // Check if the user is authenticated
         const { data, error } = await supabase.auth.getUser();

@@ -41,7 +41,7 @@
 
       }}>
 
-      <div class="flex flex-col gap-2 px-10 pt-10 pb-2 z-50 rounded drop-shadow-xl text-xl bg-gradient-to-b from-white to-red-300">
+      <div class="flex flex-col gap-2 px-10 pt-10 pb-2 z-50 rounded drop-shadow-xl text-xl border border-black border-dashed bg-green-300">
 
         <h1 class="text-2xl font-bold">Login into your account</h1>
 

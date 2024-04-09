@@ -2,18 +2,28 @@
 import "../app.pcss";
 import { page } from '$app/stores';
 import { supabase } from '$lib/supabase';
+import { invalidate } from '$app/navigation';
+import { onMount } from 'svelte';
 
 $: user = $page.data.user;
 $: console.log("USER: ",user)
 
 // event listener in +layout.svelte will update the user store whenever the authentication state changes
-supabase.auth.onAuthStateChange((event, session) => {
-  if (session?.user) {
-    user = session.user;
-  } else {
-    user = null;
-  }
-});
+onMount(() => {
+    const { data: { subscription }  } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.expires_at !== session?.expires_at) {
+        invalidate('supabase:auth'); // re-trigger load function server side
+      }
+
+      if(event == 'SIGNED_OUT') {
+        invalidate('supabase:auth');
+        console.log("$page.data.user",$page.data.user)
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  });
+  
 </script>
 
 <svelte:head>

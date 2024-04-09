@@ -42,7 +42,7 @@
         };
       }}>
 
-      <div class="flex flex-col gap-2 p-10 z-50 rounded drop-shadow-xl text-xl bg-gradient-to-b from-white to-red-300">
+      <div class="flex flex-col gap-2 px-10 pt-10 pb-2 z-50 rounded drop-shadow-xl text-xl border border-black border-dashed bg-green-300">
 
         <h1 class="text-2xl font-bold">Create your new account!</h1>
 
@@ -92,6 +92,8 @@
                     <p class="text-green-700">{successMessage}</p>
                 </div>
             {/if}
+
+            <div class="self-end text-md">already have an account? <a href="/login" class="text-red-600 hover:text-red-500 hover:underline">Log in here</a></div>
 
       </div>
 

@@ -9,3 +9,5 @@ export interface SupabaseClientAuth {
       signIn: (data: { email: string; password: string }) => Promise<{ user: any; error: Error }>;
     };
   }
+
+  
