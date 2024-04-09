@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	//"github.com/joho/godotenv" // Remove this line when deploying because fly.io will use fly secrets env variables
 	"github.com/joho/godotenv"
 	supabase "github.com/nedpals/supabase-go"
 
@@ -12,9 +13,14 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		fmt.Println("Error loading .env file")
-		return
+	isDev := os.Getenv("GO_ENV") == "development"
+
+	if isDev {
+		// Load environment variables from .env file (only in local development environment)
+		if err := godotenv.Load(); err != nil {
+			fmt.Println("Error loading .env file")
+			return
+		}
 	}
 
 	supabaseURL := os.Getenv("SUPABASE_URL")
