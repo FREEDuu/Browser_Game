@@ -9,6 +9,13 @@ export class MainMenu extends Scene
     title: GameObjects.Text;
     logoTween: Phaser.Tweens.Tween | null;
 
+    smallTileLayer : any;
+    tileLayer2 : any;
+    map : any;
+    tileLayer : any;
+    player : any;
+    
+
     constructor ()
     {
         super('MainMenu');
@@ -16,15 +23,15 @@ export class MainMenu extends Scene
 
     create ()
     {
-        this.background = this.add.image(512, 384, 'background');
+        
+        this.map = this.add.tilemap('map');
+        
+        const groundTiles = this.map.addTilesetImage('tileset');
+        const collisionTiles = this.map.addTilesetImage('tileset');
 
-        this.logo = this.add.image(512, 300, 'logo').setDepth(100);
 
-        this.title = this.add.text(512, 460, 'Main Menu', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(100);
+        this.tileLayer = this.map.createLayer('Ground', groundTiles);
+        this.tileLayer = this.map.createLayer('Alberi', collisionTiles);
 
         EventBus.emit('current-scene-ready', this);
     }

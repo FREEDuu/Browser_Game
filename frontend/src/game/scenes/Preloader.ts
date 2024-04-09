@@ -29,8 +29,18 @@ export class Preloader extends Scene
 
     preload ()
     {
-        //  Load the assets for the game - Replace with your own assets
+        //aggiungo le mappe da usare in mainmenu
         this.load.setPath('assets');
+        this.load.image('tileset', 'IceTileset.png');
+        this.load.tilemapTiledJSON('map','mappaprova.json')
+        this.load.image('player', 'player.png')
+        this.load.spritesheet('characters', '/player.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        })
+
+        //  Load the assets for the game - Replace with your own assets
+        
 
         this.load.image('logo', 'logo.png');
         this.load.image('star', 'star.png');
@@ -44,4 +54,5 @@ export class Preloader extends Scene
         //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
         this.scene.start('MainMenu');
     }
+    
 }
