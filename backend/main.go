@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	//"github.com/joho/godotenv" // Remove this line when deploying because fly.io will use fly secrets env variables
-	"github.com/joho/godotenv"
+	"github.com/joho/godotenv" // Remove this line when deploying because fly.io will use fly secrets env variables
 	supabase "github.com/nedpals/supabase-go"
 
 	routes "browser_game/routes"

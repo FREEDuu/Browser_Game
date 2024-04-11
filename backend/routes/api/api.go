@@ -20,6 +20,7 @@ func SetupAPIRoutes(r *gin.RouterGroup, client *supabase.Client) {
 	userRoutes := r.Group("/users")
 	{
 		userRoutes.GET("/", users.GetUsers(client))
+		userRoutes.POST("/newUser", users.NewUser(client))
 		// ... other user routes
 	}
 }
