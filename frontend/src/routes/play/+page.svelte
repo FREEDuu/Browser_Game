@@ -3,10 +3,6 @@
     import type { Scene } from "phaser";
     import type { MainMenu } from "../../game/scenes/MainMenu";
     import PhaserGame, { type TPhaserRef } from "../../game/PhaserGame.svelte";
-    import { page } from '$app/stores';
-
-    // The sprite can only be moved in the MainMenu Scene
-    let canMoveSprite = false;
 
     //  References to the PhaserGame component (game and scene are exposed)
     let phaserRef: TPhaserRef = { game: null, scene: null};
@@ -18,33 +14,12 @@
 
         if (scene)
         {
-
-            // Call the changeScene method defined in the `MainMenu`, `Game` and `GameOver` Scenes
             scene.changeScene();
 
         }
 
     }
     
-    const moveSprite = () => {
-
-        const scene = phaserRef.scene as MainMenu;
-
-        if (scene)
-        {
-
-            // Get the update logo position
-            (scene as MainMenu).moveLogo(({ x, y }) => {
-
-                spritePosition.x = x;
-                spritePosition.y = y;
-
-            });
-
-        }
-
-    }
-
     const addSprite = () => {
 
         const scene = phaserRef.scene as Scene;
@@ -77,8 +52,6 @@
     // Event emitted from the PhaserGame component
     const currentScene = (scene: Scene) => {
 
-        canMoveSprite = (scene.scene.key !== "MainMenu");
-
     }
     
 </script>
@@ -88,9 +61,6 @@
     <div>
         <div>
             <button class="button" on:click={changeScene}>Change Scene</button>
-        </div>
-        <div>
-            <button class="button" disabled={canMoveSprite} on:click={moveSprite}>Toggle Movement</button>
         </div>
         <div class="spritePosition">
             Sprite Position:

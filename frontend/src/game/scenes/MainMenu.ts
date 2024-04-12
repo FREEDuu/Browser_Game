@@ -1,83 +1,141 @@
 import { GameObjects, Scene } from 'phaser';
-
 import { EventBus } from '../EventBus';
 
-export class MainMenu extends Scene
-{
-    background: GameObjects.Image;
-    logo: GameObjects.Image;
-    title: GameObjects.Text;
-    logoTween: Phaser.Tweens.Tween | null;
+export class MainMenu extends Scene {
+  background: GameObjects.Image;
+  logo: GameObjects.Image;
+  title: GameObjects.Text;
 
-    smallTileLayer : any;
-    tileLayer2 : any;
-    map : any;
-    tileLayer : any;
-    player : any;
-    
+  // Button containers
+  buttonContainer: GameObjects.Container;
+  singleplayerButton: GameObjects.Text;
+  multiplayerButton: GameObjects.Text;
+  myHeroesButton: GameObjects.Text;
+  settingsButton: GameObjects.Text;
 
-    constructor ()
-    {
-        super('MainMenu');
-    }
+  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
 
-    create ()
-    {
-        
-        this.map = this.add.tilemap('map');
-        
-        const groundTiles = this.map.addTilesetImage('tileset');
-        const collisionTiles = this.map.addTilesetImage('tileset');
+  constructor()
+  {
+      super('main-menu')
+  }
+
+  init()
+  {
+      this.cursors = this.input.keyboard!.createCursorKeys()
+  }
+
+  preload()
+  {
+      this.load.image('glass-panel', 'assets/glassPanel.png')
+      this.load.image('cursor-hand', 'assets/cursor_hand.png')
+  }
+
+  selectButton(index: number)
+  {
+      // TODO
+  }
+
+  selectNextButton(change = 1)
+  {
+      // TODO
+  }
+
+  confirmSelection()
+  {
+      // TODO
+  }
+
+  update() 
+  {
+    const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up!)
+    const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down!)
+    const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space!)
+
+    if (upJustPressed)
+		{
+			this.selectNextButton(-1)
+		}
+		else if (downJustPressed)
+		{
+			this.selectNextButton(1)
+		}
+		else if (spaceJustPressed)
+		{
+			this.confirmSelection()
+		}
+  }
+
+  async create() {
+    // Add background
+    this.background = this.add.image(
+      this.cameras.main.centerX,
+      this.cameras.main.centerY,
+      'menu_background'
+    );
+
+    // Add logo image
+    this.logo = this.add.image(
+      this.cameras.main.centerX,
+      this.cameras.main.centerY - 100,
+      'game_logo'
+    );
+
+    // Add title
+    this.title = this.add.text(
+      this.cameras.main.centerX,
+      this.cameras.main.centerY + 50,
+      'Dantes adv',
+      {
+        fontSize: 48,
+        color: '#ffffff',
+      }
+    );
+
+    // Create button container
+    this.buttonContainer = this.add.container(
+      this.cameras.main.centerX,
+      // place button container below the title (adjust as needed)
+      this.cameras.main.centerY + 150
+    );
+
+	const { width, height } = this.scale
+
+	const singleplayerButton = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
+	this.add.text(singleplayerButton.x, singleplayerButton.y, 'Singleplayer').setOrigin(0.5)
+
+    const multiplayerButton = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
+	this.add.text(multiplayerButton.x, multiplayerButton.y, 'Multiplayer').setOrigin(0.5)
+
+    const settingsButton  = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
+	this.add.text(settingsButton .x, settingsButton .y, 'Singleplayer').setOrigin(0.5)
+
+    const singlePlayerButton = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
+	this.add.text(singlePlayerButton.x, singlePlayerButton.y, 'Singleplayer').setOrigin(0.5)
 
 
-        this.tileLayer = this.map.createLayer('Ground', groundTiles);
-        this.tileLayer = this.map.createLayer('Alberi', collisionTiles);
+    EventBus.emit('current-scene-ready', this);
+  }
+  
 
-        EventBus.emit('current-scene-ready', this);
-    }
-    
-    changeScene ()
-    {
-        if (this.logoTween)
-        {
-            this.logoTween.stop();
-            this.logoTween = null;
-        }
+  onSingleplayerClick() {
+    console.log('Singleplayer button clicked');
+  }
 
-        this.scene.start('Game');
-    }
+  onMultiplayerClick() {
+    console.log('Multiplayer button clicked');
+  }
 
-    moveLogo (vueCallback: ({ x, y }: { x: number, y: number }) => void)
-    {
-        if (this.logoTween)
-        {
-            if (this.logoTween.isPlaying())
-            {
-                this.logoTween.pause();
-            }
-            else
-            {
-                this.logoTween.play();
-            }
-        } 
-        else
-        {
-            this.logoTween = this.tweens.add({
-                targets: this.logo,
-                x: { value: 750, duration: 3000, ease: 'Back.easeInOut' },
-                y: { value: 80, duration: 1500, ease: 'Sine.easeOut' },
-                yoyo: true,
-                repeat: -1,
-                onUpdate: () => {
-                    if (vueCallback)
-                    {
-                        vueCallback({
-                            x: Math.floor(this.logo.x),
-                            y: Math.floor(this.logo.y)
-                        });
-                    }
-                }
-            });
-        }
-    }
+  onMyHeroesClick() {
+    console.log('My Heroes button clicked');
+  }
+
+  onSettingsClick() {
+    console.log('Settings button clicked');
+  }
+
+  changeScene ()
+  {
+      this.scene.start('Game');
+  }
 }
