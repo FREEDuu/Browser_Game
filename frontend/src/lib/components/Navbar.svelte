@@ -7,8 +7,9 @@
     import { page } from '$app/stores';
     import { supabase } from '$lib/supabase';
     import { onMount } from 'svelte';
+    import { userStore } from "@/stores";
 
-    var isLoggedIn = $page.data.user != null;
+    var isLoggedIn = $userStore != null;
 
     async function logout() {
       let { error } = await supabase.auth.signOut();
@@ -25,6 +26,7 @@
       const { data: { subscription }  } = supabase.auth.onAuthStateChange((event, session) => {
         if(event == 'SIGNED_OUT') {
           isLoggedIn = false;
+          userStore.set(null)
         }
       });
 

@@ -4,7 +4,8 @@
     import Reload from "svelte-radix/Reload.svelte";
     import { enhance, applyAction } from '$app/forms';
     import { goto } from '$app/navigation';
-    import { page } from '$app/stores';
+    import { userStore } from "@/stores";
+    import { supabase } from "@/supabase";
 
     let email = '';
     let password = '';
@@ -30,12 +31,13 @@
 
         return async ({ result, update }) => {
           if (result.type === 'success') {
+            userStore.set(await supabase.auth.getUser()); // Update client side store containing logged-in user data
             goto('/');
           } else if (result.type === 'failure') {
             supabaseError = '' + (result.data?.message ?? 'An unexpected error occurred.');
           }
 
-          await applyAction(result) // Aggiorna lo store $page.form con i valori di ritorno della action
+          await applyAction(result) // Update store $page.form with return values of the action
           isLoading = false;
         };
 

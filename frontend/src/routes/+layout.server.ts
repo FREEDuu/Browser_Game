@@ -10,7 +10,6 @@ export async function load({ locals }) {
 	
 	// If the user is already set on the server, return it
 	if (locals.user) {
-		console.log("USER SETUP ON THE SERVER")
 	  return {
 		user: locals.user
 	  };

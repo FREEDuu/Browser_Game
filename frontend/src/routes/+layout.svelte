@@ -1,12 +1,12 @@
 <script>
 import "../app.pcss";
-import { page } from '$app/stores';
 import { supabase } from '$lib/supabase';
 import { invalidate } from '$app/navigation';
 import { onMount } from 'svelte';
+import { userStore } from "@/stores";
 
-$: user = $page.data.user;
-$: console.log("USER: ",user)
+export let data;
+userStore.set(data.user)
 
 // event listener in +layout.svelte will update the user store whenever the authentication state changes
 onMount(() => {
@@ -17,7 +17,6 @@ onMount(() => {
 
       if(event == 'SIGNED_OUT') {
         invalidate('supabase:auth');
-        console.log("$page.data.user",$page.data.user)
       }
     });
 

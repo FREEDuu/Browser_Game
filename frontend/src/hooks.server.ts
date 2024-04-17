@@ -21,15 +21,17 @@ const protectedRoutes = [
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
     
+    // Check if the user is authenticated
+    const { data, error } = await supabase.auth.getUser();
+    if (data && data.user !== null) {
+        event.locals.user = data.user;
+    }
+
     // Check if the requested URL is a protected route
     if (protectedRoutes.some(route => event.url.pathname.startsWith(route))) {
         console.log("protected route requested: ",event.url.pathname)
 
-        // Check if the user is authenticated
-        const { data, error } = await supabase.auth.getUser();
-        if (data && data.user !== null) {
-            event.locals.user = data.user;
-        } else {
+        if(!data || data.user == null) {
             event.locals.user = null;
             throw redirect(302, '/login');
         }
