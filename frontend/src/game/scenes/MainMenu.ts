@@ -18,36 +18,26 @@ export class MainMenu extends Scene {
   constructor()
   {
       super('main-menu')
+      console.log("MainMenu constructor finished")
   }
 
   init()
   {
+      console.log("MainMenu init started")
       this.cursors = this.input.keyboard!.createCursorKeys()
   }
 
   preload()
   {
-      this.load.image('glass-panel', 'assets/glassPanel.png')
-      this.load.image('cursor-hand', 'assets/cursor_hand.png')
-  }
+      //this.load.image('glass-panel', 'assets/glassPanel.png')
+      //this.load.image('cursor-hand', 'assets/cursor_hand.png')
 
-  selectButton(index: number)
-  {
-      // TODO
-  }
-
-  selectNextButton(change = 1)
-  {
-      // TODO
-  }
-
-  confirmSelection()
-  {
-      // TODO
+      console.log("MainMenu preloaded")
   }
 
   update() 
   {
+    console.log("next tick")
     const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up!)
     const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down!)
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space!)
@@ -66,20 +56,17 @@ export class MainMenu extends Scene {
 		}
   }
 
-  async create() {
+  create() {
+    console.log("create started")
     // Add background
-    this.background = this.add.image(
-      this.cameras.main.centerX,
-      this.cameras.main.centerY,
-      'menu_background'
-    );
+    this.cameras.main.setBackgroundColor('#263238');
 
-    // Add logo image
+    /*
     this.logo = this.add.image(
       this.cameras.main.centerX,
       this.cameras.main.centerY - 100,
       'game_logo'
-    );
+    ); */
 
     // Add title
     this.title = this.add.text(
@@ -95,29 +82,54 @@ export class MainMenu extends Scene {
     // Create button container
     this.buttonContainer = this.add.container(
       this.cameras.main.centerX,
-      // place button container below the title (adjust as needed)
-      this.cameras.main.centerY + 150
+      this.cameras.main.centerY
     );
 
-	const { width, height } = this.scale
-
-	const singleplayerButton = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
-	this.add.text(singleplayerButton.x, singleplayerButton.y, 'Singleplayer').setOrigin(0.5)
-
-    const multiplayerButton = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
-	this.add.text(multiplayerButton.x, multiplayerButton.y, 'Multiplayer').setOrigin(0.5)
-
-    const settingsButton  = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
-	this.add.text(settingsButton .x, settingsButton .y, 'Singleplayer').setOrigin(0.5)
-
-    const singlePlayerButton = this.add.image(width * 0.5, height * 0.6, 'glass-panel').setDisplaySize(150, 50)
-	this.add.text(singlePlayerButton.x, singlePlayerButton.y, 'Singleplayer').setOrigin(0.5)
-
-
+    const width = 400; 
+    const height = 200;
+    
+    const buttonStyle = {
+      font: '20px',
+      fill: '#fff',
+      align: 'center'
+    };
+    
+    const buttonPadding = 10; 
+    
+    // Singleplayer Button
+    const singleplayerButton = this.add.text(width * 0.5, height * 0.6, 'Singleplayer', buttonStyle);
+    singleplayerButton.setDisplaySize(150 + buttonPadding * 2, 50 + buttonPadding * 2); 
+    singleplayerButton.setOrigin(0.5);
+    
+    // Multiplayer Button 
+    const multiplayerButton = this.add.text(width * 0.5, height * 0.7, 'Multiplayer', buttonStyle);
+    multiplayerButton.setDisplaySize(150 + buttonPadding * 2, 50 + buttonPadding * 2); 
+    multiplayerButton.setOrigin(0.5);
+    multiplayerButton.on
+    
+    // Settings Button 
+    const settingsButton = this.add.text(width * 0.5, height * 0.8, 'Settings', buttonStyle);
+    settingsButton.setDisplaySize(150 + buttonPadding * 2, 50 + buttonPadding * 2); 
+    settingsButton.setOrigin(0.5);
     EventBus.emit('current-scene-ready', this);
   }
   
 
+  selectButton(index: number)
+  {
+      // TODO
+  }
+
+  selectNextButton(change = 1)
+  {
+      // TODO
+  }
+
+  confirmSelection()
+  {
+      // TODO
+  }
+  
   onSingleplayerClick() {
     console.log('Singleplayer button clicked');
   }
@@ -136,6 +148,7 @@ export class MainMenu extends Scene {
 
   changeScene ()
   {
+      console.log("changescene")
       this.scene.start('Game');
   }
 }
