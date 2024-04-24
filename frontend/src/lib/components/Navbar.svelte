@@ -24,6 +24,7 @@
 
     onMount(() => {
       const { data: { subscription }  } = supabase.auth.onAuthStateChange((event, session) => {
+        console.log("$page.user",$page.data)
         if(event == 'SIGNED_OUT') {
           isLoggedIn = false;
           userStore.set(null)
@@ -58,7 +59,7 @@
 
           <DropdownMenu.Content>
             <DropdownMenu.Group>
-              <DropdownMenu.Label>{$page.data.user.user_metadata.username}</DropdownMenu.Label>
+              <DropdownMenu.Label>{$page.data.user.username}</DropdownMenu.Label>
               <DropdownMenu.Separator />
               <DropdownMenu.Item> <Person class="h-5 w-5 mr-2" /> Profile</DropdownMenu.Item>
               <DropdownMenu.Item> <BarChart class="h-5 w-5 mr-2" /> Statistics</DropdownMenu.Item>

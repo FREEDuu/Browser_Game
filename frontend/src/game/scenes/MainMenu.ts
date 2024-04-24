@@ -17,13 +17,11 @@ export class MainMenu extends Scene {
 
   constructor()
   {
-      super('main-menu')
-      console.log("MainMenu constructor finished")
+      super('MainMenu')
   }
 
   init()
   {
-      console.log("MainMenu init started")
       this.cursors = this.input.keyboard!.createCursorKeys()
   }
 
@@ -37,7 +35,6 @@ export class MainMenu extends Scene {
 
   update() 
   {
-    console.log("next tick")
     const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up!)
     const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down!)
     const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space!)
@@ -57,60 +54,68 @@ export class MainMenu extends Scene {
   }
 
   create() {
-    console.log("create started")
     // Add background
     this.cameras.main.setBackgroundColor('#263238');
 
-    /*
     this.logo = this.add.image(
       this.cameras.main.centerX,
-      this.cameras.main.centerY - 100,
+      this.cameras.main.centerY - 150,
       'game_logo'
-    ); */
+    ); 
 
     // Add title
     this.title = this.add.text(
       this.cameras.main.centerX,
-      this.cameras.main.centerY + 50,
+      this.cameras.main.centerY - 250,
       'Dantes adv',
       {
-        fontSize: 48,
+        fontSize: '48px',
         color: '#ffffff',
+        fontFamily: 'Arial',
       }
-    );
+    ).setOrigin(0.5, 0.5);
 
     // Create button container
     this.buttonContainer = this.add.container(
       this.cameras.main.centerX,
-      this.cameras.main.centerY
+      this.cameras.main.centerY - 50
     );
-
-    const width = 400; 
-    const height = 200;
     
     const buttonStyle = {
-      font: '20px',
+      font: '18px Arial',
       fill: '#fff',
       align: 'center'
     };
     
-    const buttonPadding = 10; 
+    const buttonPadding = 10;
+    const buttonWidth = 120;
+    const buttonHeight = 50; 
+    const buttonSpacing = 20;
+    
+    // Calculate starting Y position for buttons to be under the logo
+    const startY = 0; 
     
     // Singleplayer Button
-    const singleplayerButton = this.add.text(width * 0.5, height * 0.6, 'Singleplayer', buttonStyle);
-    singleplayerButton.setDisplaySize(150 + buttonPadding * 2, 50 + buttonPadding * 2); 
+    const singleplayerButton = this.add.text(0, startY, 'Singleplayer', buttonStyle);
+    singleplayerButton.setFixedSize(buttonWidth + buttonPadding * 2, buttonHeight + buttonPadding * 2); 
     singleplayerButton.setOrigin(0.5);
+    singleplayerButton.setInteractive().on('pointerdown', this.onSingleplayerClick.bind(this));
     
     // Multiplayer Button 
-    const multiplayerButton = this.add.text(width * 0.5, height * 0.7, 'Multiplayer', buttonStyle);
-    multiplayerButton.setDisplaySize(150 + buttonPadding * 2, 50 + buttonPadding * 2); 
+    const multiplayerButton = this.add.text(0, startY + (buttonHeight + buttonSpacing), 'Multiplayer', buttonStyle);
+    multiplayerButton.setFixedSize(buttonWidth + buttonPadding * 2, buttonHeight + buttonPadding * 2); 
     multiplayerButton.setOrigin(0.5);
-    multiplayerButton.on
+    multiplayerButton.setInteractive().on('pointerdown', this.onMultiplayerClick.bind(this));
     
     // Settings Button 
-    const settingsButton = this.add.text(width * 0.5, height * 0.8, 'Settings', buttonStyle);
-    settingsButton.setDisplaySize(150 + buttonPadding * 2, 50 + buttonPadding * 2); 
+    const settingsButton = this.add.text(0, startY + 2 * (buttonHeight + buttonSpacing), 'Settings', buttonStyle);
+    settingsButton.setFixedSize(buttonWidth + buttonPadding * 2, buttonHeight + buttonPadding * 2); 
     settingsButton.setOrigin(0.5);
+    settingsButton.setInteractive().on('pointerdown', this.onSettingsClick.bind(this));
+
+    // Add buttons to container
+    this.buttonContainer.add([singleplayerButton, multiplayerButton, settingsButton]);
+
     EventBus.emit('current-scene-ready', this);
   }
   
@@ -151,4 +156,5 @@ export class MainMenu extends Scene {
       console.log("changescene")
       this.scene.start('Game');
   }
+
 }

@@ -1,0 +1,22 @@
+{
+  "ignoredFiles": [
+    "tsconfig.json",
+    ".vercel",
+    ".svelte-kit",
+    "node_modules",
+    "vite",
+    ".npmrc",
+    "components.json",
+    "package-lock.json",
+    "vite",
+    "static",
+    "app.d.ts",
+    ".vscode",
+    ".dockerignore",
+    "Dockerfile",
+    "go.mod",
+    "go.sum",
+    "fly.toml"
+    ],
+  "ignoredExtensions": [".md"]
+}
