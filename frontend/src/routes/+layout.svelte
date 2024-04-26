@@ -11,16 +11,19 @@ userStore.set(data.user)
 // event listener in +layout.svelte will update the user store whenever the authentication state changes
 onMount(() => {
     const { data: { subscription }  } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("event", event);
+      userStore.set(data.user);
+
       if (session?.expires_at !== session?.expires_at) {
         invalidate('supabase:auth'); // re-trigger load function server side
       }
 
-      if(event == 'SIGNED_OUT') {
+      if (event == 'SIGNED_OUT') {
+        userStore.set(null); // Clear the user store on sign out
         invalidate('supabase:auth');
       }
     });
 
-    return () => subscription.unsubscribe();
   });
   
 </script>

@@ -3,7 +3,6 @@
     import { Button } from "$lib/components/ui/button/index.js";
     import Reload from "svelte-radix/Reload.svelte";
     import { enhance, applyAction } from '$app/forms';
-    import { goto } from '$app/navigation';
     import { userStore } from "@/stores";
     import { supabase } from "@/supabase";
 
@@ -32,7 +31,7 @@
         return async ({ result, update }) => {
           if (result.type === 'success') {
             userStore.set(await supabase.auth.getUser()); // Update client side store containing logged-in user data
-            goto('/');
+            window.location.href = '/';
           } else if (result.type === 'failure') {
             supabaseError = '' + (result.data?.message ?? 'An unexpected error occurred.');
           }

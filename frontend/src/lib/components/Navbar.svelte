@@ -1,39 +1,43 @@
 <script>
-    import Play from "svelte-radix/Play.svelte";
-    import Person from "svelte-radix/Person.svelte"
-    import BarChart from "svelte-radix/BarChart.svelte"
-    import Exit from "svelte-radix/Exit.svelte"
-    import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-    import { page } from '$app/stores';
-    import { supabase } from '$lib/supabase';
-    import { onMount } from 'svelte';
-    import { userStore } from "@/stores";
+// @ts-nocheck
 
-    var isLoggedIn = $userStore != null;
+  import { onMount } from 'svelte';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import Play from "svelte-radix/Play.svelte";
+  import Person from "svelte-radix/Person.svelte";
+  import BarChart from "svelte-radix/BarChart.svelte";
+  import Exit from "svelte-radix/Exit.svelte";
+  import { userStore } from "@/stores";
+  import { supabase } from '$lib/supabase';
 
-    async function logout() {
+  // Reactive statement for login status
+  $: isLoggedIn = $userStore != null;
+
+  async function logout() {
       let { error } = await supabase.auth.signOut();
-      fetch('/api/sign-out', {
-        method: 'POST'
-      });
+      fetch('/api/sign-out', { method: 'POST' });
 
-      if(error != null) {
-        console.log("error logout",error)
+      if (error) {
+          console.log("error logging out", error);
       }
-    }
+  }
 
-    onMount(() => {
-      const { data: { subscription }  } = supabase.auth.onAuthStateChange((event, session) => {
-        console.log("$page.user",$page.data)
-        if(event == 'SIGNED_OUT') {
-          isLoggedIn = false;
-          userStore.set(null)
-        }
+  // Monitor authentication state changes
+  onMount(() => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_OUT') {
+              userStore.set(null);
+          } else if (session) {
+              userStore.set(session.user);  // Ensure user store is updated when session changes
+          }
       });
 
-      return () => subscription.unsubscribe();
-    });
-  </script>
+      return () => {
+          subscription.unsubscribe();
+      };
+  });
+</script>
+
   
   <nav class="py-2 mb-6 border-y border-black border-dashed">
 
@@ -59,7 +63,7 @@
 
           <DropdownMenu.Content>
             <DropdownMenu.Group>
-              <DropdownMenu.Label>{$page.data.user.username}</DropdownMenu.Label>
+              <DropdownMenu.Label>{$userStore.username}</DropdownMenu.Label>
               <DropdownMenu.Separator />
               <DropdownMenu.Item> <Person class="h-5 w-5 mr-2" /> Profile</DropdownMenu.Item>
               <DropdownMenu.Item> <BarChart class="h-5 w-5 mr-2" /> Statistics</DropdownMenu.Item>
